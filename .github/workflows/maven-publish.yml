@@ -25,7 +25,10 @@ jobs:
         server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
-    - name: Build with Maven
+    - name: Run tests and analyse coverage
+      run: mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent verify org.jacoco:jacoco-maven-plugin:report -P coverage-per-test
+
+    - name: Publish analysis to sonarcloud
       run: mvn -B package --file pom.xml
 
     - name: Publish to GitHub Packages Apache Maven

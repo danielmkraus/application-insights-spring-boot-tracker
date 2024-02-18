@@ -11,8 +11,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.awaitility.Awaitility.await;
 
-public class ClassExecutionFilterPerformanceTest {
-
+class ClassExecutionFilterPerformanceTest {
 
     @Test
     void shouldPerformMillionFilterOperationsInLessThanOneSecond() {

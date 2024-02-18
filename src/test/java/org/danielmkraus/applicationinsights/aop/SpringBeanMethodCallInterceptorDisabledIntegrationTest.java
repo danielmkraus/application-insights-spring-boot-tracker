@@ -24,7 +24,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 @DirtiesContext
 @TestPropertySource("classpath:application.yml")
 @EnableApplicationInsightsDependencyTracer
-public class SpringBeanMethodCallInterceptorDisabledIntegrationTest {
+class SpringBeanMethodCallInterceptorDisabledIntegrationTest {
 
     @Autowired
     SampleController controller;

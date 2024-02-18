@@ -1,3 +1,6 @@
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=application-insights-spring-boot-tracker)](https://sonarcloud.io/summary/new_code?id=application-insights-spring-boot-tracker)
+[![Maven Package](https://github.com/danielmkraus/application-insights-spring-boot-tracker/actions/workflows/maven-publish.yml/badge.svg)](https://github.com/danielmkraus/application-insights-spring-boot-tracker/actions/workflows/maven-publish.yml)
+
 # Microsoft Azure Application Insights Spring bean calls tracker
 
 ## Motivation
@@ -5,8 +8,8 @@
 In both performance optimization and troubleshooting scenarios, the more comprehensive the data collected and available 
 for analysis, the better. This enables a deeper understanding of the application, facilitates pinpointing problematic 
 areas within the software, and provides insights into the root causes of issues. It's important to note that not all 
-external connections, such as LDAP connectivity, are tracked by application insights. Therefore, there's a necessity to 
-gather additional runtime execution data for ongoing calls.
+external connections, such as LDAP connectivity, are tracked by [Microsoft Azure Application Insights](https://learn.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview). 
+Therefore, there's a necessity to gather additional runtime execution data for ongoing calls.
 
 ## Objective
 
@@ -73,7 +76,7 @@ specified by default
 
 #### yml file
 
-```
+```yaml
 spring:
   application-insights:
     tracker:
@@ -88,7 +91,7 @@ spring:
 
 #### properties file
 
-```
+```properties
 spring.application-insights.tracker.enabled=true
 spring.application-insights.tracker.exclude-packages[0]=org.sample.service.**
 spring.application-insights.tracker.exclude-packages[1]=org.springframework.**

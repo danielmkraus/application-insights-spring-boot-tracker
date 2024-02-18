@@ -27,5 +27,7 @@ jobs:
       run: chmod +x ./mvnw && ./mvnw clean org.jacoco:jacoco-maven-plugin:prepare-agent verify org.jacoco:jacoco-maven-plugin:report -P coverage-per-test
 
     - name: Publish analysis to sonarcloud
-      run: chmod +x ./mvnw && ./mvnw sonar:sonar -P coverage-per-test
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: chmod +x ./mvnw && ./mvnw sonar:sonar -P coverage-per-test -Dsonar.token=${SONAR_TOKEN}
     

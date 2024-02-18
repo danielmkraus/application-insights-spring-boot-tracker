@@ -25,7 +25,7 @@ import static org.mockito.Mockito.verify;
 @DirtiesContext
 @TestPropertySource("classpath:application.yml")
 @EnableApplicationInsightsDependencyTracer
-public class SpringBeanMethodCallInterceptorIntegrationTest {
+class SpringBeanMethodCallInterceptorIntegrationTest {
 
     @Autowired
     SampleController controller;

@@ -23,11 +23,7 @@ jobs:
         server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
-    - name: Run tests and analyse coverage
-      run: chmod +x ./mvnw && ./mvnw clean org.jacoco:jacoco-maven-plugin:prepare-agent verify org.jacoco:jacoco-maven-plugin:report -P coverage-per-test
-
-    - name: Publish analysis to sonarcloud
+    - name: Run tests and publish analysis to sonarcloud
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run: chmod +x ./mvnw && ./mvnw sonar:sonar -P coverage-per-test -Dsonar.token=${SONAR_TOKEN}
-    
+      run: chmod +x ./mvnw && ./mvnw clean org.jacoco:jacoco-maven-plugin:prepare-agent verify org.jacoco:jacoco-maven-plugin:report -P coverage-per-test && ./mvnw sonar:sonar -P coverage-per-test -Dsonar.token=${SONAR_TOKEN}

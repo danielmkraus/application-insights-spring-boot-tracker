@@ -1,4 +1,5 @@
 [![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=application-insights-spring-boot-tracker)](https://sonarcloud.io/summary/new_code?id=application-insights-spring-boot-tracker)
+[![Maven Package](https://github.com/danielmkraus/application-insights-spring-boot-tracker/actions/workflows/maven-publish.yml/badge.svg)](https://github.com/danielmkraus/application-insights-spring-boot-tracker/actions/workflows/maven-publish.yml)
 
 # Microsoft Azure Application Insights Spring bean calls tracker
 

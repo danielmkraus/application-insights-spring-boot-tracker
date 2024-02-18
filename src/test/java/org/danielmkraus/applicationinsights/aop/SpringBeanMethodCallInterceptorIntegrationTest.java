@@ -1,0 +1,50 @@
+package org.danielmkraus.applicationinsights.aop;
+
+import com.microsoft.applicationinsights.TelemetryClient;
+import org.danielmkraus.applicationinsights.configuration.EnableApplicationInsightsDependencyTracer;
+import org.junit.jupiter.api.Test;
+import org.sample.controller.SampleController;
+import org.sample.repository.SampleRepository;
+import org.sample.service.SampleService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestPropertySource;
+
+import static org.danielmkraus.applicationinsights.aop.SpringBeanMethodCallInterceptorTest.methodExecution;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.*;
+
+@SpringBootTest(classes = {
+        SampleController.class,
+        SampleService.class,
+        SampleRepository.class
+})
+@DirtiesContext
+@TestPropertySource("classpath:application.yml")
+@EnableApplicationInsightsDependencyTracer
+public class SpringBeanMethodCallInterceptorIntegrationTest {
+
+    @Autowired
+    SampleController controller;
+
+    @SpyBean
+    TelemetryClient telemetryClient;
+
+    @Test
+    void filtersOutClassInExclusionFilter(){
+        controller.save("hi");
+
+        verify(telemetryClient)
+                .trackDependency(argThat(methodExecution("public void org.sample.repository.SampleRepository.save(java.lang.Object)")));
+        verify(telemetryClient)
+                .trackDependency(argThat(methodExecution("public void org.sample.controller.SampleController.save(java.lang.Object)")));
+
+        //as it was on exclusion filters, should not be tracked
+        verify(telemetryClient, times(0))
+                .trackDependency(argThat(methodExecution("public void org.sample.service.SampleService.save(java.lang.Object)")));
+
+    }
+
+}

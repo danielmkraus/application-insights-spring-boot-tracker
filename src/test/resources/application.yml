@@ -1,0 +1,8 @@
+spring:
+  application-insights:
+    tracker:
+      excludePackages:
+        - org.sample.service.**
+      includePackages:
+        - org.sample.**
+      enabled: true

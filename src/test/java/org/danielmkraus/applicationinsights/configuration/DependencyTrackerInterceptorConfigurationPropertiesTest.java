@@ -12,12 +12,12 @@ class DependencyTrackerInterceptorConfigurationPropertiesTest {
     private DependencyTrackerInterceptorConfigurationProperties properties;
 
     @BeforeEach
-    void setup(){
+    void setup() {
         properties = new DependencyTrackerInterceptorConfigurationProperties();
     }
 
     @Test
-    void enabled(){
+    void enabled() {
         properties.setEnabled(true);
         assertThat(properties.isEnabled()).isTrue();
 
@@ -26,7 +26,7 @@ class DependencyTrackerInterceptorConfigurationPropertiesTest {
     }
 
     @Test
-    void includePackages(){
+    void includePackages() {
         properties.setIncludePackages(null);
         assertThat(properties.getIncludePackages()).isNull();
 
@@ -35,7 +35,7 @@ class DependencyTrackerInterceptorConfigurationPropertiesTest {
     }
 
     @Test
-    void excludePackages(){
+    void excludePackages() {
         properties.setExcludePackages(null);
         assertThat(properties.getExcludePackages()).isNull();
 

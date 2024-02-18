@@ -24,8 +24,8 @@ jobs:
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
     - name: Run tests and analyse coverage
-      run: mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent verify org.jacoco:jacoco-maven-plugin:report -P coverage-per-test
+      run: chmod +x ./mvnw && ./mvnw clean org.jacoco:jacoco-maven-plugin:prepare-agent verify org.jacoco:jacoco-maven-plugin:report -P coverage-per-test
 
     - name: Publish analysis to sonarcloud
-      run: mvn sonar:sonar -P coverage-per-test
+      run: chmod +x ./mvnw && ./mvnw sonar:sonar -P coverage-per-test
     

@@ -17,12 +17,12 @@ public class SampleController {
         this.service = service;
     }
 
-    public void save(Object object){
+    public void save(Object object) {
         LOG.info("Saving data");
         service.save(object);
     }
 
-    public void saveWithException(){
+    public void saveWithException() {
         LOG.info("Whoops");
         service.saveWithException();
     }

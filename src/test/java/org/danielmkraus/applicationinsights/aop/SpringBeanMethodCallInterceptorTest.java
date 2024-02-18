@@ -40,7 +40,7 @@ class SpringBeanMethodCallInterceptorTest {
     SampleController sampleController;
 
     @Test
-    void allClassesFilteredOut(){
+    void allClassesFilteredOut() {
         when(classExecutionFilter.filter(any(String.class))).thenReturn(Boolean.FALSE);
 
         sampleController.save("hi!");
@@ -54,7 +54,7 @@ class SpringBeanMethodCallInterceptorTest {
     }
 
     @Test
-    void allClassesIncluded(){
+    void allClassesIncluded() {
         when(classExecutionFilter.filter(any(String.class))).thenReturn(Boolean.TRUE);
 
         sampleController.save("hi!");
@@ -67,11 +67,11 @@ class SpringBeanMethodCallInterceptorTest {
         verify(telemetryClient).trackDependency(argThat(methodExecution("public void org.sample.service.SampleService.save(java.lang.Object)")));
         verify(telemetryClient).trackDependency(argThat(methodExecution("public void org.sample.controller.SampleController.save(java.lang.Object)")));
 
-        verifyNoMoreInteractions(classExecutionFilter,telemetryClient);
+        verifyNoMoreInteractions(classExecutionFilter, telemetryClient);
     }
 
     @Test
-    void allClassesIncludedWithException(){
+    void allClassesIncludedWithException() {
         when(classExecutionFilter.filter(any(String.class))).thenReturn(Boolean.TRUE);
 
         assertThatIllegalStateException().isThrownBy(sampleController::saveWithException);
@@ -84,17 +84,17 @@ class SpringBeanMethodCallInterceptorTest {
         verify(telemetryClient).trackDependency(argThat(failedMethodExecution("public void org.sample.service.SampleService.saveWithException()")));
         verify(telemetryClient).trackDependency(argThat(failedMethodExecution("public void org.sample.controller.SampleController.saveWithException()")));
 
-        verifyNoMoreInteractions(classExecutionFilter,telemetryClient);
+        verifyNoMoreInteractions(classExecutionFilter, telemetryClient);
     }
 
-    public static ArgumentMatcher<RemoteDependencyTelemetry> failedMethodExecution(String name){
-        return value-> !value.getSuccess()
+    public static ArgumentMatcher<RemoteDependencyTelemetry> failedMethodExecution(String name) {
+        return value -> !value.getSuccess()
                 && Strings.isNotBlank(value.getCommandName())
                 && value.getCommandName().equals(name);
     }
 
-    public static ArgumentMatcher<RemoteDependencyTelemetry> methodExecution(String name){
-        return value-> value.getSuccess()
+    public static ArgumentMatcher<RemoteDependencyTelemetry> methodExecution(String name) {
+        return value -> value.getSuccess()
                 && Strings.isNotBlank(value.getCommandName())
                 && value.getCommandName().equals(name);
     }

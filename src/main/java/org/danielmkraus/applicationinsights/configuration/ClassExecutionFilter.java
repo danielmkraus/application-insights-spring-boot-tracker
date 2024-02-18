@@ -18,17 +18,17 @@ public class ClassExecutionFilter {
         this.matcher = matcher;
     }
 
-    public boolean filter(String invocation){
+    public boolean filter(String invocation) {
         boolean notExcluded = isEmpty(packagesExcluded) ||
                 packagesExcluded.stream()
-                        .noneMatch(pattern-> matcher.match(pattern, invocation));
+                        .noneMatch(pattern -> matcher.match(pattern, invocation));
 
         return notExcluded && included(invocation);
     }
 
-    private boolean included(String invocation){
+    private boolean included(String invocation) {
         return isEmpty(packagesIncluded)
                 || packagesIncluded.stream()
-                    .anyMatch(pattern-> matcher.match(pattern, invocation));
+                .anyMatch(pattern -> matcher.match(pattern, invocation));
     }
 }

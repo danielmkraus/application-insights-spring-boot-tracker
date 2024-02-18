@@ -8,14 +8,13 @@ import org.sample.repository.SampleRepository;
 import org.sample.service.SampleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.danielmkraus.applicationinsights.aop.SpringBeanMethodCallInterceptorTest.methodExecution;
-import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 @SpringBootTest(classes = {
         SampleController.class,
@@ -25,26 +24,25 @@ import static org.mockito.Mockito.verify;
 @DirtiesContext
 @TestPropertySource("classpath:application.yml")
 @EnableApplicationInsightsDependencyTracer
-public class SpringBeanMethodCallInterceptorIntegrationTest {
+public class SpringBeanMethodCallInterceptorDisabledIntegrationTest {
 
     @Autowired
     SampleController controller;
 
-    @SpyBean
+    @MockBean
     TelemetryClient telemetryClient;
 
     @Test
     void filtersOutClassInExclusionFilter() {
         controller.save("hi");
 
-        verify(telemetryClient)
-                .trackDependency(argThat(methodExecution("public void org.sample.repository.SampleRepository.save(java.lang.Object)")));
-        verify(telemetryClient)
-                .trackDependency(argThat(methodExecution("public void org.sample.controller.SampleController.save(java.lang.Object)")));
+        verifyNoInteractions(telemetryClient);
 
-        //as it was on exclusion filters, should not be tracked
-        verify(telemetryClient, times(0))
-                .trackDependency(argThat(methodExecution("public void org.sample.service.SampleService.save(java.lang.Object)")));
+    }
+
+    @DynamicPropertySource
+    static void setProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.application-insights.tracker.enabled", () -> "false");
     }
 
 }

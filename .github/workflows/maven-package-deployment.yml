@@ -28,7 +28,7 @@ jobs:
       - name: Set project version
         env:
           GITHUB_REF: ${{ vars.GITHUB_REF }}
-        run: chmod +x ./mvnw && ./mvnw versions:set -DnewVersion=${GITHUB_REF}
+        run: chmod +x ./mvnw && ./mvnw versions:set -DnewVersion=${GITHUB_REF_NAME}
 
       - name: Set up JDK 17 with gitlab settings
         uses: actions/setup-java@v3

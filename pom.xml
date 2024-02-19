@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.danielmkraus</groupId>
     <artifactId>application-insights-spring-boot-tracker</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
     <name>${groupId}:${artifactId}</name>
     <description>Microsoft Azure Application Insights Spring bean calls tracker.</description>
     <url>https://github.com/danielmkraus/application-insights-spring-boot-tracker</url>
@@ -84,6 +84,29 @@
             <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>net.ju-n.maven.plugins</groupId>
+                <artifactId>checksum-maven-plugin</artifactId>
+                <version>1.4</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
     <profiles>
         <profile>
             <id>coverage-per-test</id>
@@ -153,26 +176,14 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.7</version>
-                        <extensions>true</extensions>
-                        <configuration>
-                            <serverId>ossrh</serverId>
-                            <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                        </configuration>
-                    </plugin>
-                    <plugin>
                         <groupId>org.sonatype.central</groupId>
                         <artifactId>central-publishing-maven-plugin</artifactId>
                         <version>0.3.0</version>
                         <extensions>true</extensions>
                         <configuration>
-                            <publishingServerId>ossrh</publishingServerId>
+                            <publishingServerId>central</publishingServerId>
                             <tokenAuth>true</tokenAuth>
-                            <autoPublish>true</autoPublish>
-                            <waitUntil>published</waitUntil>
+                            <autoPublish>false</autoPublish>
                             <checksums>all</checksums>
                         </configuration>
                     </plugin>

@@ -6,7 +6,7 @@
     <groupId>io.github.danielmkraus</groupId>
     <artifactId>application-insights-spring-boot-tracker</artifactId>
     <version>1.0.1</version>
-    <name>${groupId}:${artifactId}</name>
+    <name>${project.groupId}:${project.artifactId}</name>
     <description>Microsoft Azure Application Insights Spring bean calls tracker.</description>
     <url>https://github.com/danielmkraus/application-insights-spring-boot-tracker</url>
     <parent>

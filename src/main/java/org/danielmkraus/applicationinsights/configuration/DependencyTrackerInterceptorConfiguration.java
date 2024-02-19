@@ -47,7 +47,7 @@ public class DependencyTrackerInterceptorConfiguration {
     }
 
     @Bean
-    @ConditionalOnProperty(name = "spring.application-insights.tracker.global-interceptor-enabled", matchIfMissing = true)
+    @ConditionalOnProperty(name = "spring.application-insights.tracker.global-interceptor-enabled", havingValue = "true", matchIfMissing = true)
     public GlobalSpringBeanMethodCallInterceptor globalSpringBeanMethodCallInterceptor(
             ClassExecutionFilter classExecutionFilter,
             TelemetryClient client) {

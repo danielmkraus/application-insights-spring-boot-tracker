@@ -21,7 +21,7 @@ public class ApplicationInsightsTracker {
     }
 
     public Object trackCall(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        if (classExecutionFilter.filter(proceedingJoinPoint.getSignature().getDeclaringTypeName())) {
+        if (!classExecutionFilter.filter(proceedingJoinPoint.getSignature().getDeclaringTypeName())) {
             return proceedingJoinPoint.proceed();
         }
 

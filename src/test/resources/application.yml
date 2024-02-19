@@ -2,7 +2,7 @@ spring:
   application-insights:
     tracker:
       excludePackages:
-        - org.sample.service.**
+        - org.sample.service.SampleService**
       includePackages:
         - org.sample.**
       enabled: true

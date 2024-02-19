@@ -3,15 +3,17 @@ name: Maven Package and Deployment
 on:
   release:
     types: [created]
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
-
 
     steps:
       - uses: actions/checkout@v4
@@ -31,6 +33,21 @@ jobs:
         env:
           GITHUB_REF: ${{ vars.GITHUB_REF }}
         run: chmod +x ./mvnw && ./mvnw versions:set -DnewVersion=${GITHUB_REF}
+
+      - name: Set up JDK 17 with gitlab settings
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          server-id: github
+          settings-path: ${{ github.workspace }}
+
+      - name: Publish to GitHub Packages Apache Maven
+        run: chmod +x ./mvnw && ./mvnw -s $GITHUB_WORKSPACE/settings.xml clean javadoc:jar source:jar package checksum:artifacts deploy  -Dgpg.keyname=${MAVEN_GPG_KEYNAME} -Dgpg.passphrase=${MAVEN_GPG_PASSPHRASE} -DskipTests
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+          MAVEN_GPG_KEYNAME: ${{ secrets.MAVEN_GPG_KEYNAME }}
 
       - name: Publish to Apache Maven Central
         run: chmod +x ./mvnw && ./mvnw -P release clean javadoc:jar source:jar package checksum:artifacts deploy  -Dgpg.keyname=${MAVEN_GPG_KEYNAME} -Dgpg.passphrase=${MAVEN_GPG_PASSPHRASE} -DskipTests

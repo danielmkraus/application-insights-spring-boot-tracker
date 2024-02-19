@@ -24,6 +24,5 @@ class ClassExecutionFilterPerformanceTest {
         await().atMost(1, TimeUnit.SECONDS)
                 .untilAsserted(() -> stream.sequential()
                         .forEach(value -> filter.filter(String.valueOf(value))));
-
     }
 }

@@ -42,4 +42,13 @@ class DependencyTrackerInterceptorConfigurationPropertiesTest {
         properties.setExcludePackages(Collections.singletonList("a"));
         assertThat(properties.getExcludePackages()).containsExactly("a");
     }
+
+    @Test
+    void globalInterceptorEnabled() {
+        properties.setGlobalInterceptorEnabled(true);
+        assertThat(properties.isGlobalInterceptorEnabled()).isTrue();
+
+        properties.setGlobalInterceptorEnabled(false);
+        assertThat(properties.isGlobalInterceptorEnabled()).isFalse();
+    }
 }

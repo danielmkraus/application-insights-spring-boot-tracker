@@ -1,43 +1,30 @@
-package org.danielmkraus.applicationinsights.aop;
+package org.danielmkraus.applicationinsights.configuration;
 
 import com.microsoft.applicationinsights.TelemetryClient;
 import com.microsoft.applicationinsights.telemetry.Duration;
 import com.microsoft.applicationinsights.telemetry.RemoteDependencyTelemetry;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.danielmkraus.applicationinsights.configuration.ClassExecutionFilter;
 
 import java.util.Date;
 
-@Aspect
-public class SpringBeanMethodCallInterceptor {
+public class ApplicationInsightsTracker {
 
     private final TelemetryClient telemetryClient;
-    private final ClassExecutionFilter classExecutionFilter;
     private final String dependencyType;
+    private final ClassExecutionFilter classExecutionFilter;
 
-    public SpringBeanMethodCallInterceptor(TelemetryClient telemetryClient, ClassExecutionFilter filter, String dependencyType) {
+    public ApplicationInsightsTracker(TelemetryClient telemetryClient, String dependencyType, ClassExecutionFilter classExecutionFilter) {
         this.telemetryClient = telemetryClient;
-        this.classExecutionFilter = filter;
         this.dependencyType = dependencyType;
+        this.classExecutionFilter = classExecutionFilter;
     }
 
-    @Around("within(*) " +
-            "&& !within(org.springframework.context..*) " +
-            "&& !within(org.danielmkraus.applicationinsights..*) " +
-            "&& !within(org.springframework.beans..*) " +
-            "&& !within(org.springframework.boot..*)" +
-            "&& !within(com.microsoft.applicationinsights..*)")
-    public Object intercept(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+    public Object trackCall(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         if (classExecutionFilter.filter(proceedingJoinPoint.getSignature().getDeclaringTypeName())) {
-            return trackCall(proceedingJoinPoint);
+            return proceedingJoinPoint.proceed();
         }
-        return proceedingJoinPoint.proceed();
-    }
 
-    private Object trackCall(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         Date start = new Date();
         boolean succeed = true;
         try {
@@ -58,4 +45,3 @@ public class SpringBeanMethodCallInterceptor {
         }
     }
 }
-

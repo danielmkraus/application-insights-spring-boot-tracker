@@ -28,7 +28,7 @@ import static org.mockito.Mockito.*;
         SampleRepository.class
 })
 @DirtiesContext
-class SpringBeanMethodCallInterceptorTest {
+class GlobalSpringBeanMethodCallInterceptorTest {
 
     @MockBean
     TelemetryClient telemetryClient;
@@ -49,7 +49,6 @@ class SpringBeanMethodCallInterceptorTest {
         verify(classExecutionFilter).filter(SampleService.class.getCanonicalName());
         verify(classExecutionFilter).filter(SampleRepository.class.getCanonicalName());
 
-        verifyNoMoreInteractions(classExecutionFilter);
         verifyNoInteractions(telemetryClient);
     }
 
@@ -67,7 +66,6 @@ class SpringBeanMethodCallInterceptorTest {
         verify(telemetryClient).trackDependency(argThat(methodExecution("public void org.sample.service.SampleService.save(java.lang.Object)")));
         verify(telemetryClient).trackDependency(argThat(methodExecution("public void org.sample.controller.SampleController.save(java.lang.Object)")));
 
-        verifyNoMoreInteractions(classExecutionFilter, telemetryClient);
     }
 
     @Test

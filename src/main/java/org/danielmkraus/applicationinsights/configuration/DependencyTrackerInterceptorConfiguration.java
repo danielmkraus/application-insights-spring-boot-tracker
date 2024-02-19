@@ -1,7 +1,8 @@
 package org.danielmkraus.applicationinsights.configuration;
 
 import com.microsoft.applicationinsights.TelemetryClient;
-import org.danielmkraus.applicationinsights.aop.SpringBeanMethodCallInterceptor;
+import org.danielmkraus.applicationinsights.aop.AnnotationSpringBeanMethodCallInterceptor;
+import org.danielmkraus.applicationinsights.aop.GlobalSpringBeanMethodCallInterceptor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -15,6 +16,8 @@ import org.springframework.util.AntPathMatcher;
 @EnableConfigurationProperties
 @ConditionalOnProperty(name = "spring.application-insights.tracker.enabled", havingValue = "true", matchIfMissing = true)
 public class DependencyTrackerInterceptorConfiguration {
+
+    public static final String DEPENDENCY_TYPE = "InProc";
 
     @Bean
     @ConfigurationProperties("spring.application-insights.tracker")
@@ -36,10 +39,23 @@ public class DependencyTrackerInterceptorConfiguration {
     }
 
     @Bean
-    public SpringBeanMethodCallInterceptor springBeanMethodCallInterceptor(ClassExecutionFilter classExecutionFilter,
-                                                                           TelemetryClient client) {
-        return new SpringBeanMethodCallInterceptor(
-                client, classExecutionFilter, "InProc");
+    public AnnotationSpringBeanMethodCallInterceptor annotationSpringBeanMethodCallInterceptor(
+            ClassExecutionFilter classExecutionFilter,
+            TelemetryClient client) {
+        return new AnnotationSpringBeanMethodCallInterceptor(
+                tracker(client, classExecutionFilter));
     }
 
+    @Bean
+    @ConditionalOnProperty(name = "spring.application-insights.tracker.global-interceptor-enabled", matchIfMissing = true)
+    public GlobalSpringBeanMethodCallInterceptor globalSpringBeanMethodCallInterceptor(
+            ClassExecutionFilter classExecutionFilter,
+            TelemetryClient client) {
+        return new GlobalSpringBeanMethodCallInterceptor(
+                tracker(client, classExecutionFilter));
+    }
+
+    public ApplicationInsightsTracker tracker(TelemetryClient telemetryClient, ClassExecutionFilter classExecutionFilter) {
+        return new ApplicationInsightsTracker(telemetryClient, DEPENDENCY_TYPE, classExecutionFilter);
+    }
 }

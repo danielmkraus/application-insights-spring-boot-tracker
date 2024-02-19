@@ -6,3 +6,4 @@ spring:
       includePackages:
         - org.sample.**
       enabled: true
+      global-interceptor-enabled: true

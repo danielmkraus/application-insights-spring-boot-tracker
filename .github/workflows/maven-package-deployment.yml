@@ -19,17 +19,26 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - name: Set-up Java 8 to compile artifacts
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+
+      - name: Compiles the project
+        run: chmod +x ./mvnw && ./mvnw javadoc:jar source:jar package -DskipTests
+
       - name: Set up Apache Maven Central
         uses: actions/setup-java@v4
         with: # running setup-java again overwrites the settings.xml
           distribution: 'temurin'
-          java-version: '8'
+          java-version: '17'
           server-id: ossrh # Value of the distributionManagement/repository/id field of the pom.xml
           server-username: MAVEN_USERNAME # env variable for username in deploy
           server-password: MAVEN_CENTRAL_TOKEN # env variable for token in deploy
 
       - name: Publish to Apache Maven Central
-        run: chmod +x ./mvnw && ./mvnw -P release javadoc:jar source:jar deploy -Dgpg.passphrase=${MAVEN_GPG_PASSPHRASE}
+        run: chmod +x ./mvnw && ./mvnw -P release javadoc:jar source:jar deploy -DskipTests -Dgpg.passphrase=${MAVEN_GPG_PASSPHRASE}
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
           MAVEN_CENTRAL_TOKEN: ${{ secrets.MAVEN_CENTRAL_TOKEN }}

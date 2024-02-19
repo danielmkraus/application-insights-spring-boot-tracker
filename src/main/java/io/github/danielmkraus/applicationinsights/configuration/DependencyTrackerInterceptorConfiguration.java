@@ -1,8 +1,8 @@
-package org.danielmkraus.applicationinsights.configuration;
+package io.github.danielmkraus.applicationinsights.configuration;
 
 import com.microsoft.applicationinsights.TelemetryClient;
-import org.danielmkraus.applicationinsights.aop.AnnotationSpringBeanMethodCallInterceptor;
-import org.danielmkraus.applicationinsights.aop.GlobalSpringBeanMethodCallInterceptor;
+import io.github.danielmkraus.applicationinsights.aop.AnnotationSpringBeanMethodCallInterceptor;
+import io.github.danielmkraus.applicationinsights.aop.GlobalSpringBeanMethodCallInterceptor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

@@ -1,4 +1,4 @@
-package org.danielmkraus.applicationinsights.configuration;
+package io.github.danielmkraus.applicationinsights.configuration;
 
 import com.microsoft.applicationinsights.TelemetryClient;
 import com.microsoft.applicationinsights.telemetry.Duration;

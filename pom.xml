@@ -3,29 +3,30 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-    <groupId>org.danielmkraus</groupId>
+    <groupId>io.github.danielmkraus</groupId>
     <artifactId>application-insights-spring-boot-tracker</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
+    <name>${project.groupId}:${project.artifactId}</name>
+    <description>Microsoft Azure Application Insights Spring bean calls tracker.</description>
+    <url>https://github.com/danielmkraus/application-insights-spring-boot-tracker</url>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.7.18</version>
     </parent>
-
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
         <version.aspectj>1.9.19</version.aspectj>
-
         <sonar.projectKey>application-insights-spring-boot-tracker</sonar.projectKey>
         <sonar.projectName>Microsoft Azure Application Insights Spring bean calls tracker</sonar.projectName>
-        <sonar.links.homepage>https://github.com/danielmkraus/application-insights-spring-boot-tracker</sonar.links.homepage>
+        <sonar.links.homepage>https://github.com/danielmkraus/application-insights-spring-boot-tracker
+        </sonar.links.homepage>
         <sonar.links.ci>https://github.com/danielmkraus/application-insights-spring-boot-tracker</sonar.links.ci>
         <sonar.links.scm>https://github.com/danielmkraus/application-insights-spring-boot-tracker</sonar.links.scm>
-        <sonar.links.issue>https://github.com/danielmkraus/application-insights-spring-boot-tracker/issues</sonar.links.issue>
+        <sonar.links.issue>https://github.com/danielmkraus/application-insights-spring-boot-tracker/issues
+        </sonar.links.issue>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.organization>danielmkraus</sonar.organization>
         <sonar.exclusions>target/**/*</sonar.exclusions>
@@ -83,8 +84,36 @@
             <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
     </dependencies>
-
-
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>net.ju-n.maven.plugins</groupId>
+                <artifactId>checksum-maven-plugin</artifactId>
+                <version>1.4</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!-- Prevent gpg from using pinentry programs -->
+                    <gpgArguments>
+                        <arg>--pinentry-mode</arg>
+                        <arg>loopback</arg>
+                    </gpgArguments>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
     <profiles>
         <profile>
             <id>coverage-per-test</id>
@@ -149,5 +178,44 @@
                 </dependency>
             </dependencies>
         </profile>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.3.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                            <tokenAuth>true</tokenAuth>
+                            <autoPublish>false</autoPublish>
+                            <checksums>all</checksums>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>Daniel Machado Kraus</name>
+            <email>danielmkraus@gmail.com</email>
+            <organization>danielmkraus</organization>
+            <organizationUrl>https://github.com/danielmkraus</organizationUrl>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git:git://github.com/danielmkraus/application-insights-spring-boot-tracker.git</connection>
+        <developerConnection>scm:git:ssh://github.com:danielmkraus/application-insights-spring-boot-tracker.git
+        </developerConnection>
+        <url>http://github.com/danielmkraus/application-insights-spring-boot-tracker/tree/master</url>
+    </scm>
 </project>

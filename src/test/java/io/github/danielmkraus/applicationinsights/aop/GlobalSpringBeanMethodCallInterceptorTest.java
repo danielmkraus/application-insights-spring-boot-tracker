@@ -1,10 +1,10 @@
-package org.danielmkraus.applicationinsights.aop;
+package io.github.danielmkraus.applicationinsights.aop;
 
 import com.microsoft.applicationinsights.TelemetryClient;
 import com.microsoft.applicationinsights.telemetry.RemoteDependencyTelemetry;
 import org.apache.logging.log4j.util.Strings;
-import org.danielmkraus.applicationinsights.configuration.ClassExecutionFilter;
-import org.danielmkraus.applicationinsights.configuration.DependencyTrackerInterceptorConfiguration;
+import io.github.danielmkraus.applicationinsights.configuration.ClassExecutionFilter;
+import io.github.danielmkraus.applicationinsights.configuration.DependencyTrackerInterceptorConfiguration;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatcher;
 import org.sample.controller.SampleController;

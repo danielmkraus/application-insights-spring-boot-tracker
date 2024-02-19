@@ -31,17 +31,17 @@ If you have already configured Azure Application Insights in your Spring Boot Ap
    - Maven:
     ```xml
     <dependency>
-        <groupId>org.danielkraus</groupId>
-        <artifactId>application-insights-spring-boot-tracker</artifactId>
-        <version>1.0.0</version>
+       <groupId>io.github.danielmkraus</groupId>
+       <artifactId>application-insights-spring-boot-tracker</artifactId>
+       <version>1.0.0</version>
     </dependency>
     ```
    - Gradle: 
    ```groovy
-   implementation 'org.danielkraus:application-insights-spring-boot-tracker:1.0.0'
+   implementation 'io.github.danielmkraus:application-insights-spring-boot-tracker:1.0.0'
    ```
 
-2. Add the Auto Configuration annotation `@org.danielmkraus.applicationinsights.annotation.EnableApplicationInsightsDependencyTracer` 
+2. Add the Auto Configuration annotation `@annotation.io.github.danielmkraus.applicationinsights.EnableApplicationInsightsDependencyTracer` 
 to your spring configuration.
 3. Check the transaction details in Azure Application Insights, you should be able to see the Spring bean calls if this
 library is correctly configured.
@@ -79,7 +79,7 @@ specified by default
 
 
 Manages the activation of the global tracker for Spring bean calls in Application Insights. When this configuration is
-disabled, only Spring beans annotated with `@org.danielmkraus.applicationinsights.annotation.ApplicationInsightsTracking`  
+disabled, only Spring beans annotated with `@annotation.io.github.danielmkraus.applicationinsights.ApplicationInsightsTracking`  
 will be tracked in Azure Application Insights. This configuration proves beneficial in cases where third-party libraries 
 lack support for AOP interceptor, such as Spring beans without public constructors. This feature is enabled by default.
 

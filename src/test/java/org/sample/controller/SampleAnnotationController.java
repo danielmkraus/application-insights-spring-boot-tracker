@@ -1,6 +1,6 @@
 package org.sample.controller;
 
-import org.danielmkraus.applicationinsights.annotation.ApplicationInsightsTracking;
+import io.github.danielmkraus.applicationinsights.annotation.ApplicationInsightsTracking;
 import org.sample.service.SampleAnnotationService;
 import org.springframework.stereotype.Controller;
 

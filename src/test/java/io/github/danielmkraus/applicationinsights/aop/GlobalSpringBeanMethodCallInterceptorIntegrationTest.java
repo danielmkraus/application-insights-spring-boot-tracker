@@ -1,7 +1,7 @@
-package org.danielmkraus.applicationinsights.aop;
+package io.github.danielmkraus.applicationinsights.aop;
 
 import com.microsoft.applicationinsights.TelemetryClient;
-import org.danielmkraus.applicationinsights.annotation.EnableApplicationInsightsDependencyTracer;
+import io.github.danielmkraus.applicationinsights.annotation.EnableApplicationInsightsDependencyTracer;
 import org.junit.jupiter.api.Test;
 import org.sample.controller.SampleController;
 import org.sample.repository.SampleRepository;
@@ -12,7 +12,7 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.danielmkraus.applicationinsights.aop.GlobalSpringBeanMethodCallInterceptorTest.methodExecution;
+import static io.github.danielmkraus.applicationinsights.aop.GlobalSpringBeanMethodCallInterceptorTest.methodExecution;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;

@@ -1,4 +1,4 @@
-package org.danielmkraus.applicationinsights.annotation;
+package io.github.danielmkraus.applicationinsights.annotation;
 
 import java.lang.annotation.*;
 

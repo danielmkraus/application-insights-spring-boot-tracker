@@ -1,9 +1,9 @@
-package org.danielmkraus.applicationinsights.aop;
+package io.github.danielmkraus.applicationinsights.aop;
 
+import io.github.danielmkraus.applicationinsights.configuration.ApplicationInsightsTracker;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.danielmkraus.applicationinsights.configuration.ApplicationInsightsTracker;
 
 /**
  * Aspect responsible to intercept all spring bean calls to be tracked in azure application insights
@@ -18,15 +18,15 @@ public class GlobalSpringBeanMethodCallInterceptor {
     }
 
     @Around("within(*) " +
-            "&& !within(org.danielmkraus.applicationinsights..*) " +
+            "&& !within(io.github.danielmkraus.applicationinsights..*) " +
             "&& !within(is(EnumType)) " +
             "&& !within(is(FinalType)) " +
             "&& !within(is(AspectType))" +
             "&& !within(org.springframework..*) " +
-            "&& !@within(org.danielmkraus.applicationinsights.annotation.ApplicationInsightsTracking) " +
-            "&& !@within(org.danielmkraus.applicationinsights.annotation.DisableApplicationInsightsTracking) " +
-            "&& !@target(org.danielmkraus.applicationinsights.annotation.DisableApplicationInsightsTracking) " +
-            "&& !@annotation(org.danielmkraus.applicationinsights.annotation.DisableApplicationInsightsTracking) " +
+            "&& !@within(io.github.danielmkraus.applicationinsights.annotation.ApplicationInsightsTracking) " +
+            "&& !@within(io.github.danielmkraus.applicationinsights.annotation.DisableApplicationInsightsTracking) " +
+            "&& !@target(io.github.danielmkraus.applicationinsights.annotation.DisableApplicationInsightsTracking) " +
+            "&& !@annotation(io.github.danielmkraus.applicationinsights.annotation.DisableApplicationInsightsTracking) " +
             "&& !within(com.microsoft.applicationinsights..*) ")
     public Object intercept(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         return tracker.trackCall(proceedingJoinPoint);

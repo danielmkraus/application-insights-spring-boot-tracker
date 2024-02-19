@@ -1,7 +1,7 @@
 package org.sample.service;
 
-import org.danielmkraus.applicationinsights.annotation.ApplicationInsightsTracking;
-import org.danielmkraus.applicationinsights.annotation.DisableApplicationInsightsTracking;
+import io.github.danielmkraus.applicationinsights.annotation.ApplicationInsightsTracking;
+import io.github.danielmkraus.applicationinsights.annotation.DisableApplicationInsightsTracking;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

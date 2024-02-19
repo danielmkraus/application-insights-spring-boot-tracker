@@ -20,17 +20,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set new version
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-
-      - name: Set project version
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: chmod +x ./mvnw && ./mvnw versions:set -DnewVersion=${GITHUB_REF}
-
       - name: Set up Apache Maven Central
         uses: actions/setup-java@v4
         with: # running setup-java again overwrites the settings.xml
@@ -41,6 +30,11 @@ jobs:
           server-password: MAVEN_CENTRAL_TOKEN # env variable for token in deploy
           gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }} # Value of the GPG private key to import
           gpg-passphrase: GPG_PASSPHRASE # env variable for GPG private key passphrase
+
+      - name: Set project version
+        env:
+          GITHUB_REF: ${{ vars.GITHUB_REF }}
+        run: chmod +x ./mvnw && ./mvnw versions:set -DnewVersion=${GITHUB_REF}
 
       - name: Publish to Apache Maven Central
         run: chmod +x ./mvnw && ./mvnw -P release clean javadoc:jar source:jar package checksum:artifacts deploy  -Dgpg.keyname=${MAVEN_GPG_KEYNAME} -Dgpg.passphrase=${MAVEN_GPG_PASSPHRASE} -DskipTests

@@ -29,7 +29,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 @DirtiesContext
 @TestPropertySource("classpath:application.yml")
 @EnableApplicationInsightsDependencyTracer
-public class InterceptorDisabledIntegrationTest {
+class InterceptorDisabledIntegrationTest {
 
     @Autowired
     SampleController controller;

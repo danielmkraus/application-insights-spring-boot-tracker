@@ -43,7 +43,7 @@ jobs:
           settings-path: ${{ github.workspace }}
 
       - name: Publish to GitHub Packages Apache Maven
-        run: chmod +x ./mvnw && ./mvnw -s $GITHUB_WORKSPACE/settings.xml clean javadoc:jar source:jar package checksum:artifacts deploy  -Dgpg.keyname=${MAVEN_GPG_KEYNAME} -Dgpg.passphrase=${MAVEN_GPG_PASSPHRASE} -DskipTests -DaltDeploymentRepository=https://maven.pkg.github.com/danielmkraus/application-insights-spring-boot-tracker
+        run: chmod +x ./mvnw && ./mvnw -s $GITHUB_WORKSPACE/settings.xml clean javadoc:jar source:jar package checksum:artifacts deploy  -Dgpg.keyname=${MAVEN_GPG_KEYNAME} -Dgpg.passphrase=${MAVEN_GPG_PASSPHRASE} -DskipTests -DaltDeploymentRepository=github::default::https://maven.pkg.github.com/danielmkraus/application-insights-spring-boot-tracker
         env:
           GITHUB_TOKEN: ${{ github.token }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}

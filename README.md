@@ -8,7 +8,8 @@
 In both performance optimization and troubleshooting scenarios, the more comprehensive the data collected and available 
 for analysis, the better. This enables a deeper understanding of the application, facilitates pinpointing problematic 
 areas within the software, and provides insights into the root causes of issues. It's important to note that not all 
-external connections, such as LDAP connectivity, are tracked by [Microsoft Azure Application Insights](https://learn.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview). 
+external connections, such as LDAP connectivity and Neo4j graph database connectivity, are tracked by 
+[Microsoft Azure Application Insights](https://learn.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview). 
 Therefore, there's a necessity to gather additional runtime execution data for ongoing calls.
 
 ## Objective
@@ -40,12 +41,14 @@ If you have already configured Azure Application Insights in your Spring Boot Ap
    implementation 'org.danielkraus:application-insights-spring-boot-tracker:1.0.0'
    ```
 
-2. Add the Auto Configuration annotation `@org.danielmkraus.applicationinsights.configuration.EnableApplicationInsightsDependencyTracer` 
+2. Add the Auto Configuration annotation `@org.danielmkraus.applicationinsights.annotation.EnableApplicationInsightsDependencyTracer` 
 to your spring configuration.
 3. Check the transaction details in Azure Application Insights, you should be able to see the Spring bean calls if this
 library is correctly configured.
     - Before
-    - After
+      ![Application insights view without metrics](./before.png)
+    - After:
+      ![Application insights view with metrics](./after.png)
 
 ## Configuration properties
 
@@ -72,6 +75,14 @@ Specifies a list of packages using [Ant path expression notation](https://docs.s
 that will be excluded in the bean interceptor. If no value is specified, no exclusion will be applied. No value 
 specified by default
 
+#### spring.application-insights.tracker.global-interceptor-enabled
+
+
+Manages the activation of the global tracker for Spring bean calls in Application Insights. When this configuration is
+disabled, only Spring beans annotated with `@org.danielmkraus.applicationinsights.annotation.ApplicationInsightsTracking`  
+will be tracked in Azure Application Insights. This configuration proves beneficial in cases where third-party libraries 
+lack support for AOP interceptor, such as Spring beans without public constructors. This feature is enabled by default.
+
 ### Examples
 
 #### yml file
@@ -81,6 +92,7 @@ spring:
   application-insights:
     tracker:
       enabled: true
+      global-interceptor-enabled: true
       exclude-packages:
         - org.sample.service.**
         - org.springframework.**
@@ -93,6 +105,7 @@ spring:
 
 ```properties
 spring.application-insights.tracker.enabled=true
+spring.application-insights.tracker.global-interceptor-enabled=true
 spring.application-insights.tracker.exclude-packages[0]=org.sample.service.**
 spring.application-insights.tracker.exclude-packages[1]=org.springframework.**
 spring.application-insights.tracker.include-packages[0]=org.sample.**

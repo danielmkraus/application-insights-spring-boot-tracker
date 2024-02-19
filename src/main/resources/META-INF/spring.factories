@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  org.daniemlkraus.applicationinsights.configuration.DependencyTrackerInterceptorConfiguration
+  org.danielmkraus.applicationinsights.configuration.DependencyTrackerInterceptorConfiguration

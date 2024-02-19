@@ -32,6 +32,24 @@ public class DependencyTrackerInterceptorConfigurationProperties {
      */
     private boolean enabled;
 
+    public boolean isGlobalInterceptorEnabled() {
+        return globalInterceptorEnabled;
+    }
+
+    public void setGlobalInterceptorEnabled(boolean globalInterceptorEnabled) {
+        this.globalInterceptorEnabled = globalInterceptorEnabled;
+    }
+
+    /**
+     * Controls the activation of the global interceptor for Application Insights Spring bean calls tracker.
+     * If this configuration is not active, only the beans annotated with
+     * {@link org.danielmkraus.applicationinsights.annotation.ApplicationInsightsTracking} will be tracked
+     *
+     * @see org.danielmkraus.applicationinsights.annotation.ApplicationInsightsTracking
+     * @see org.danielmkraus.applicationinsights.annotation.DisableApplicationInsightsTracking
+     */
+    private boolean globalInterceptorEnabled;
+
     public List<String> getIncludePackages() {
         return includePackages;
     }

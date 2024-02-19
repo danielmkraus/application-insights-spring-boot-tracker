@@ -1,7 +1,7 @@
 package org.danielmkraus.applicationinsights.aop;
 
 import com.microsoft.applicationinsights.TelemetryClient;
-import org.danielmkraus.applicationinsights.configuration.EnableApplicationInsightsDependencyTracer;
+import org.danielmkraus.applicationinsights.annotation.EnableApplicationInsightsDependencyTracer;
 import org.junit.jupiter.api.Test;
 import org.sample.controller.SampleController;
 import org.sample.repository.SampleRepository;
@@ -24,7 +24,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 @DirtiesContext
 @TestPropertySource("classpath:application.yml")
 @EnableApplicationInsightsDependencyTracer
-class SpringBeanMethodCallInterceptorDisabledIntegrationTest {
+class GlobalSpringBeanMethodCallInterceptorDisabledIntegrationTest {
 
     @Autowired
     SampleController controller;
@@ -37,12 +37,11 @@ class SpringBeanMethodCallInterceptorDisabledIntegrationTest {
         controller.save("hi");
 
         verifyNoInteractions(telemetryClient);
-
     }
 
     @DynamicPropertySource
     static void setProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.application-insights.tracker.enabled", () -> "false");
+        registry.add("spring.application-insights.tracker.global-interceptor-enabled", () -> "false");
     }
 
 }

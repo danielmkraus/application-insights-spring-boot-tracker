@@ -1,8 +1,8 @@
-package org.danielmkraus.applicationinsights.aop;
+package io.github.danielmkraus.applicationinsights.aop;
 
 
 import com.microsoft.applicationinsights.TelemetryClient;
-import org.danielmkraus.applicationinsights.annotation.EnableApplicationInsightsDependencyTracer;
+import io.github.danielmkraus.applicationinsights.annotation.EnableApplicationInsightsDependencyTracer;
 import org.junit.jupiter.api.Test;
 import org.sample.controller.SampleAnnotationController;
 import org.sample.controller.SampleController;

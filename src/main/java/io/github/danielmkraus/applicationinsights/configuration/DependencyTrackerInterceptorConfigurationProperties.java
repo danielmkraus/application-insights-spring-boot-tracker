@@ -1,4 +1,7 @@
-package org.danielmkraus.applicationinsights.configuration;
+package io.github.danielmkraus.applicationinsights.configuration;
+
+import io.github.danielmkraus.applicationinsights.annotation.ApplicationInsightsTracking;
+import io.github.danielmkraus.applicationinsights.annotation.DisableApplicationInsightsTracking;
 
 import java.util.List;
 
@@ -43,10 +46,10 @@ public class DependencyTrackerInterceptorConfigurationProperties {
     /**
      * Controls the activation of the global interceptor for Application Insights Spring bean calls tracker.
      * If this configuration is not active, only the beans annotated with
-     * {@link org.danielmkraus.applicationinsights.annotation.ApplicationInsightsTracking} will be tracked
+     * {@link ApplicationInsightsTracking} will be tracked
      *
-     * @see org.danielmkraus.applicationinsights.annotation.ApplicationInsightsTracking
-     * @see org.danielmkraus.applicationinsights.annotation.DisableApplicationInsightsTracking
+     * @see ApplicationInsightsTracking
+     * @see DisableApplicationInsightsTracking
      */
     private boolean globalInterceptorEnabled;
 

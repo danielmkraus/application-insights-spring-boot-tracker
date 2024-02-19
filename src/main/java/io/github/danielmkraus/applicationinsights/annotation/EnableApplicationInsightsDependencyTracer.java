@@ -1,6 +1,7 @@
-package org.danielmkraus.applicationinsights.annotation;
+package io.github.danielmkraus.applicationinsights.annotation;
 
-import org.danielmkraus.applicationinsights.configuration.DependencyTrackerInterceptorConfiguration;
+import io.github.danielmkraus.applicationinsights.configuration.DependencyTrackerInterceptorConfiguration;
+import io.github.danielmkraus.applicationinsights.configuration.DependencyTrackerInterceptorConfigurationProperties;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.Documented;
@@ -15,7 +16,7 @@ import static java.lang.annotation.ElementType.TYPE;
  *
  * @see DisableApplicationInsightsTracking
  * @see ApplicationInsightsTracking
- * @see org.danielmkraus.applicationinsights.configuration.DependencyTrackerInterceptorConfigurationProperties
+ * @see DependencyTrackerInterceptorConfigurationProperties
  */
 @Documented
 @Target(TYPE)

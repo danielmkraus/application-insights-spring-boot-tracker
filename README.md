@@ -41,7 +41,7 @@ If you have already configured Azure Application Insights in your Spring Boot Ap
    implementation 'io.github.danielmkraus:application-insights-spring-boot-tracker:1.0.0'
    ```
 
-2. Add the Auto Configuration annotation `@annotation.io.github.danielmkraus.applicationinsights.EnableApplicationInsightsDependencyTracer` 
+2. Add the Auto Configuration annotation `@annotation.io.github.danielmkraus.applicationinsights.EnableApplicationInsightsDependencyTracker` 
 to your spring configuration.
 3. Check the transaction details in Azure Application Insights, you should be able to see the Spring bean calls if this
 library is correctly configured.

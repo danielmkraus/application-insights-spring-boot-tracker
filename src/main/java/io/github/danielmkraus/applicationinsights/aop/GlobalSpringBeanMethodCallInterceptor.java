@@ -18,16 +18,24 @@ public class GlobalSpringBeanMethodCallInterceptor {
     }
 
     @Around("within(*) " +
-            "&& !within(io.github.danielmkraus.applicationinsights..*) " +
-            "&& !within(is(EnumType)) " +
-            "&& !within(is(FinalType)) " +
-            "&& !within(is(AspectType))" +
-            "&& !within(org.springframework..*) " +
-            "&& !@within(io.github.danielmkraus.applicationinsights.annotation.ApplicationInsightsTracking) " +
-            "&& !@within(io.github.danielmkraus.applicationinsights.annotation.DisableApplicationInsightsTracking) " +
-            "&& !@target(io.github.danielmkraus.applicationinsights.annotation.DisableApplicationInsightsTracking) " +
-            "&& !@annotation(io.github.danielmkraus.applicationinsights.annotation.DisableApplicationInsightsTracking) " +
-            "&& !within(com.microsoft.applicationinsights..*) ")
+            " && !within(io.github.danielmkraus.applicationinsights..*) " +
+            " && !within(is(EnumType)) " +
+            " && !within(is(FinalType)) " +
+            " && !within(is(AspectType))" +
+            " && !target(is(EnumType)) " +
+            " && !target(is(FinalType)) " +
+            " && !target(is(AspectType))" +
+            " && !this(is(EnumType)) " +
+            " && !this(is(FinalType)) " +
+            " && !this(is(AspectType))" +
+            " && !within(org.springframework..*) " +
+            " && !@within(io.github.danielmkraus.applicationinsights.annotation.ApplicationInsightsTracking) " +
+            " && !@target(io.github.danielmkraus.applicationinsights.annotation.ApplicationInsightsTracking) " +
+            " && !@annotation(io.github.danielmkraus.applicationinsights.annotation.ApplicationInsightsTracking) " +
+            " && !@within(io.github.danielmkraus.applicationinsights.annotation.DisableApplicationInsightsTracking) " +
+            " && !@target(io.github.danielmkraus.applicationinsights.annotation.DisableApplicationInsightsTracking) " +
+            " && !@annotation(io.github.danielmkraus.applicationinsights.annotation.DisableApplicationInsightsTracking) " +
+            " && !within(com.microsoft.applicationinsights..*) ")
     public Object intercept(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         return tracker.trackCall(proceedingJoinPoint);
     }

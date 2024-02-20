@@ -22,5 +22,5 @@ import static java.lang.annotation.ElementType.TYPE;
 @Target(TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Import(DependencyTrackerInterceptorConfiguration.class)
-public @interface EnableApplicationInsightsDependencyTracer {
+public @interface EnableApplicationInsightsDependencyTracker {
 }

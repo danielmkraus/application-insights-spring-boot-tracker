@@ -1,7 +1,7 @@
 package io.github.danielmkraus.applicationinsights.aop;
 
 import com.microsoft.applicationinsights.TelemetryClient;
-import io.github.danielmkraus.applicationinsights.annotation.EnableApplicationInsightsDependencyTracer;
+import io.github.danielmkraus.applicationinsights.annotation.EnableApplicationInsightsDependencyTracker;
 import org.junit.jupiter.api.Test;
 import org.sample.controller.SampleController;
 import org.sample.repository.SampleRepository;
@@ -24,7 +24,7 @@ import static org.mockito.Mockito.verify;
 })
 @DirtiesContext
 @TestPropertySource("classpath:application.yml")
-@EnableApplicationInsightsDependencyTracer
+@EnableApplicationInsightsDependencyTracker
 class GlobalSpringBeanMethodCallInterceptorIntegrationTest {
 
     @Autowired

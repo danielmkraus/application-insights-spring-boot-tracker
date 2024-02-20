@@ -2,7 +2,7 @@ package io.github.danielmkraus.applicationinsights.aop;
 
 
 import com.microsoft.applicationinsights.TelemetryClient;
-import io.github.danielmkraus.applicationinsights.annotation.EnableApplicationInsightsDependencyTracer;
+import io.github.danielmkraus.applicationinsights.annotation.EnableApplicationInsightsDependencyTracker;
 import org.junit.jupiter.api.Test;
 import org.sample.controller.SampleAnnotationController;
 import org.sample.controller.SampleController;
@@ -28,7 +28,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 })
 @DirtiesContext
 @TestPropertySource("classpath:application.yml")
-@EnableApplicationInsightsDependencyTracer
+@EnableApplicationInsightsDependencyTracker
 class InterceptorDisabledIntegrationTest {
 
     @Autowired

@@ -21,6 +21,8 @@ jobs:
           java-version: '17'
           server-id: github
           settings-path: ${{ github.workspace }}
+          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }} # Value of the GPG private key to import
+          gpg-passphrase: GPG_PASSPHRASE # env variable for GPG private key passphrase
 
       - name: Set project version
         env:

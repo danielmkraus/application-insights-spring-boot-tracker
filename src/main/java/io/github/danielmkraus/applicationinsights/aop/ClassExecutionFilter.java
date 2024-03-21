@@ -1,4 +1,4 @@
-package io.github.danielmkraus.applicationinsights.configuration;
+package io.github.danielmkraus.applicationinsights.aop;
 
 import org.springframework.util.AntPathMatcher;
 
@@ -16,6 +16,10 @@ public class ClassExecutionFilter {
         this.packagesIncluded = includePackages;
         this.packagesExcluded = excludePackages;
         this.matcher = matcher;
+    }
+
+    public boolean matches(Class<?> clazz) {
+        return filter(clazz.getCanonicalName());
     }
 
     public boolean filter(String invocation) {

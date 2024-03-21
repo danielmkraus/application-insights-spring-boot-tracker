@@ -1,9 +1,11 @@
 spring:
   application-insights:
     tracker:
-      excludePackages:
+      exclude-packages:
         - org.sample.service.SampleService**
-      includePackages:
+      include-packages:
         - org.sample.**
       enabled: true
-      global-interceptor-enabled: true
+logging:
+  level:
+    root: debug

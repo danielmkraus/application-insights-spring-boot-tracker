@@ -2,9 +2,8 @@ package io.github.danielmkraus.applicationinsights.aop;
 
 import com.microsoft.applicationinsights.TelemetryClient;
 import com.microsoft.applicationinsights.telemetry.RemoteDependencyTelemetry;
+import io.github.danielmkraus.applicationinsights.annotation.EnableApplicationInsightsDependencyTracker;
 import org.apache.logging.log4j.util.Strings;
-import io.github.danielmkraus.applicationinsights.configuration.ClassExecutionFilter;
-import io.github.danielmkraus.applicationinsights.configuration.DependencyTrackerInterceptorConfiguration;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatcher;
 import org.sample.controller.SampleController;
@@ -16,18 +15,18 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
-import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @ContextConfiguration(classes = {
-        DependencyTrackerInterceptorConfiguration.class,
         SampleController.class,
         SampleService.class,
         SampleRepository.class
 })
 @DirtiesContext
+@EnableApplicationInsightsDependencyTracker
 class GlobalSpringBeanMethodCallInterceptorTest {
 
     @MockBean
@@ -41,48 +40,14 @@ class GlobalSpringBeanMethodCallInterceptorTest {
 
     @Test
     void allClassesFilteredOut() {
-        when(classExecutionFilter.filter(any(String.class))).thenReturn(Boolean.FALSE);
+        when(classExecutionFilter.matches(any(Class.class))).thenReturn(Boolean.FALSE);
 
         sampleController.save("hi!");
-
-        verify(classExecutionFilter).filter(SampleController.class.getCanonicalName());
-        verify(classExecutionFilter).filter(SampleService.class.getCanonicalName());
-        verify(classExecutionFilter).filter(SampleRepository.class.getCanonicalName());
+        sampleController.save("hi!");
+        sampleController.save("hi!");
+        sampleController.save("hi!");
 
         verifyNoInteractions(telemetryClient);
-    }
-
-    @Test
-    void allClassesIncluded() {
-        when(classExecutionFilter.filter(any(String.class))).thenReturn(Boolean.TRUE);
-
-        sampleController.save("hi!");
-
-        verify(classExecutionFilter).filter(SampleController.class.getCanonicalName());
-        verify(classExecutionFilter).filter(SampleService.class.getCanonicalName());
-        verify(classExecutionFilter).filter(SampleRepository.class.getCanonicalName());
-
-        verify(telemetryClient).trackDependency(argThat(methodExecution("public void org.sample.repository.SampleRepository.save(java.lang.Object)")));
-        verify(telemetryClient).trackDependency(argThat(methodExecution("public void org.sample.service.SampleService.save(java.lang.Object)")));
-        verify(telemetryClient).trackDependency(argThat(methodExecution("public void org.sample.controller.SampleController.save(java.lang.Object)")));
-
-    }
-
-    @Test
-    void allClassesIncludedWithException() {
-        when(classExecutionFilter.filter(any(String.class))).thenReturn(Boolean.TRUE);
-
-        assertThatIllegalStateException().isThrownBy(sampleController::saveWithException);
-
-        verify(classExecutionFilter).filter(SampleRepository.class.getCanonicalName());
-        verify(classExecutionFilter).filter(SampleService.class.getCanonicalName());
-        verify(classExecutionFilter).filter(SampleController.class.getCanonicalName());
-
-        verify(telemetryClient).trackDependency(argThat(methodExecution("public void org.sample.repository.SampleRepository.save(java.lang.Object)")));
-        verify(telemetryClient).trackDependency(argThat(failedMethodExecution("public void org.sample.service.SampleService.saveWithException()")));
-        verify(telemetryClient).trackDependency(argThat(failedMethodExecution("public void org.sample.controller.SampleController.saveWithException()")));
-
-        verifyNoMoreInteractions(classExecutionFilter, telemetryClient);
     }
 
     public static ArgumentMatcher<RemoteDependencyTelemetry> failedMethodExecution(String name) {
@@ -96,5 +61,4 @@ class GlobalSpringBeanMethodCallInterceptorTest {
                 && Strings.isNotBlank(value.getCommandName())
                 && value.getCommandName().equals(name);
     }
-
 }

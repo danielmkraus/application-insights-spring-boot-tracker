@@ -1,18 +1,17 @@
 package io.github.danielmkraus.applicationinsights.configuration;
 
 import com.microsoft.applicationinsights.TelemetryClient;
-import io.github.danielmkraus.applicationinsights.aop.AnnotationSpringBeanMethodCallInterceptor;
+import io.github.danielmkraus.applicationinsights.aop.ApplicationInsightsTrackerAutoProxyCreator;
+import io.github.danielmkraus.applicationinsights.aop.ClassExecutionFilter;
 import io.github.danielmkraus.applicationinsights.aop.GlobalSpringBeanMethodCallInterceptor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.util.AntPathMatcher;
 
 @Configuration
-@EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableConfigurationProperties
 @ConditionalOnProperty(name = "spring.application-insights.tracker.enabled", havingValue = "true", matchIfMissing = true)
 public class DependencyTrackerInterceptorConfiguration {
@@ -20,14 +19,14 @@ public class DependencyTrackerInterceptorConfiguration {
     public static final String DEPENDENCY_TYPE = "InProc";
 
     @Bean
-    @ConfigurationProperties("spring.application-insights.tracker")
-    public DependencyTrackerInterceptorConfigurationProperties dependencyTrackerInterceptorConfigurationProperties() {
-        return new DependencyTrackerInterceptorConfigurationProperties();
+    public TelemetryClient telemetryClient() {
+        return new TelemetryClient();
     }
 
     @Bean
-    public TelemetryClient telemetryClient() {
-        return new TelemetryClient();
+    @ConfigurationProperties("spring.application-insights.tracker")
+    public DependencyTrackerInterceptorConfigurationProperties dependencyTrackerInterceptorConfigurationProperties() {
+        return new DependencyTrackerInterceptorConfigurationProperties();
     }
 
     @Bean
@@ -39,23 +38,24 @@ public class DependencyTrackerInterceptorConfiguration {
     }
 
     @Bean
-    public AnnotationSpringBeanMethodCallInterceptor annotationSpringBeanMethodCallInterceptor(
-            ClassExecutionFilter classExecutionFilter,
+    public GlobalSpringBeanMethodCallInterceptor globalApplicationInsightsSpringBeanMethodCallInterceptor(
             TelemetryClient client) {
-        return new AnnotationSpringBeanMethodCallInterceptor(
-                tracker(client, classExecutionFilter));
+        return new GlobalSpringBeanMethodCallInterceptor(
+                tracker(client));
+    }
+
+    public ApplicationInsightsTracker tracker(TelemetryClient telemetryClient) {
+        return new ApplicationInsightsTracker(telemetryClient, DEPENDENCY_TYPE);
     }
 
     @Bean
-    @ConditionalOnProperty(name = "spring.application-insights.tracker.global-interceptor-enabled", havingValue = "true", matchIfMissing = true)
-    public GlobalSpringBeanMethodCallInterceptor globalSpringBeanMethodCallInterceptor(
-            ClassExecutionFilter classExecutionFilter,
-            TelemetryClient client) {
-        return new GlobalSpringBeanMethodCallInterceptor(
-                tracker(client, classExecutionFilter));
-    }
+    public ApplicationInsightsTrackerAutoProxyCreator autoProxyCreator(ClassExecutionFilter classExecutionFilter) {
+        ApplicationInsightsTrackerAutoProxyCreator applicationInsightsTrackerAutoProxyCreator = new ApplicationInsightsTrackerAutoProxyCreator(classExecutionFilter);
 
-    public ApplicationInsightsTracker tracker(TelemetryClient telemetryClient, ClassExecutionFilter classExecutionFilter) {
-        return new ApplicationInsightsTracker(telemetryClient, DEPENDENCY_TYPE, classExecutionFilter);
+        DependencyTrackerBeanDefinitionRegistry registry = DependencyTrackerBeanDefinitionRegistry.getInstance();
+        applicationInsightsTrackerAutoProxyCreator.setProxyTargetClass(registry.isProxyTargetClass());
+        applicationInsightsTrackerAutoProxyCreator.setExposeProxy(registry.isExposeProxy());
+        applicationInsightsTrackerAutoProxyCreator.setInterceptorNames("globalApplicationInsightsSpringBeanMethodCallInterceptor");
+        return applicationInsightsTrackerAutoProxyCreator;
     }
 }

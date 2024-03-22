@@ -23,6 +23,11 @@ public class GlobalSpringBeanMethodCallInterceptor implements Advisor, MethodInt
     }
 
     @Override
+    public boolean isPerInstance(){
+        return true;
+    }
+
+    @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
         return tracker.trackCall(new TraceableCall(invocation::proceed,
                 getShortMethodName(invocation),

@@ -18,7 +18,7 @@ public class ApplicationInsightsTracker {
     }
 
     public Object trackCall(TraceableCall trackedCall) throws Throwable {
-        var start = new Date();
+        Date start = new Date();
         boolean succeed = true;
         try {
             return trackedCall.proceed();

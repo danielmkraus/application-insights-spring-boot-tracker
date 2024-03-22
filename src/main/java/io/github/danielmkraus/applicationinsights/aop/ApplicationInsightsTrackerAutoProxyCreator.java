@@ -10,7 +10,7 @@ import org.springframework.lang.Nullable;
  */
 public class ApplicationInsightsTrackerAutoProxyCreator extends AbstractAutoProxyCreator {
 
-    private final ClassExecutionFilter classExecutionFilter;
+    private final transient ClassExecutionFilter classExecutionFilter;
 
     public ApplicationInsightsTrackerAutoProxyCreator(ClassExecutionFilter classExecutionFilter) {
         this.classExecutionFilter = classExecutionFilter;
@@ -26,8 +26,7 @@ public class ApplicationInsightsTrackerAutoProxyCreator extends AbstractAutoProx
      */
     @Override
     protected TargetSource getCustomTargetSource(Class<?> beanClass, String beanName) {
-        return (isSupportedBeanName(beanClass) ?
-                super.getCustomTargetSource(beanClass, beanName) : null);
+        return (isSupportedBeanName(beanClass) ? super.getCustomTargetSource(beanClass, beanName) : null);
     }
 
     /**
@@ -36,10 +35,8 @@ public class ApplicationInsightsTrackerAutoProxyCreator extends AbstractAutoProx
      */
     @Override
     @Nullable
-    protected Object[] getAdvicesAndAdvisorsForBean(
-            Class<?> beanClass, String beanName, @Nullable TargetSource targetSource) {
-        return (isSupportedBeanName(beanClass) ?
-                PROXY_WITHOUT_ADDITIONAL_INTERCEPTORS : DO_NOT_PROXY);
+    protected Object[] getAdvicesAndAdvisorsForBean(Class<?> beanClass, String beanName, @Nullable TargetSource targetSource) {
+        return (isSupportedBeanName(beanClass) ? PROXY_WITHOUT_ADDITIONAL_INTERCEPTORS : DO_NOT_PROXY);
     }
 
     /**

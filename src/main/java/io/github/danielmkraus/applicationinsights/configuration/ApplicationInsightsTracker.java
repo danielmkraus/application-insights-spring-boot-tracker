@@ -26,7 +26,7 @@ public class ApplicationInsightsTracker {
             succeed = false;
             throw e;
         } finally {
-            var dependencyTelemetry = new RemoteDependencyTelemetry();
+            RemoteDependencyTelemetry dependencyTelemetry = new RemoteDependencyTelemetry();
             dependencyTelemetry.setDuration(new Duration(System.currentTimeMillis() - start.getTime()));
             dependencyTelemetry.setType(dependencyType);
             dependencyTelemetry.setName(trackedCall.getMethodName());

@@ -1,6 +1,7 @@
 package io.github.danielmkraus.applicationinsights.configuration;
 
 
+import io.github.danielmkraus.applicationinsights.aop.ClassExecutionFilter;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.AntPathMatcher;
 

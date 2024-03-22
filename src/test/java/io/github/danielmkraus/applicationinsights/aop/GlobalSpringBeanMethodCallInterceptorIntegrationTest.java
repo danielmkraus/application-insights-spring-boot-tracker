@@ -12,7 +12,9 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 
+import static io.github.danielmkraus.applicationinsights.aop.GlobalSpringBeanMethodCallInterceptorTest.failedMethodExecution;
 import static io.github.danielmkraus.applicationinsights.aop.GlobalSpringBeanMethodCallInterceptorTest.methodExecution;
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -45,6 +47,21 @@ class GlobalSpringBeanMethodCallInterceptorIntegrationTest {
         //as it was on exclusion filters, should not be tracked
         verify(telemetryClient, times(0))
                 .trackDependency(argThat(methodExecution("public void org.sample.service.SampleService.save(java.lang.Object)")));
+    }
+
+    @Test
+    void filtersOutClassInExclusionFilterWithExceptionRaised() {
+        assertThatIllegalStateException()
+                .isThrownBy(() -> controller.saveWithException());
+
+        verify(telemetryClient)
+                .trackDependency(argThat(methodExecution("public void org.sample.repository.SampleRepository.save(java.lang.Object)")));
+        verify(telemetryClient)
+                .trackDependency(argThat(failedMethodExecution("public void org.sample.controller.SampleController.saveWithException()")));
+
+        //as it was on exclusion filters, should not be tracked
+        verify(telemetryClient, times(0))
+                .trackDependency(argThat(failedMethodExecution("public void org.sample.service.SampleService.saveWithException()")));
     }
 
 }

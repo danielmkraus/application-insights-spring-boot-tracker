@@ -1,5 +1,6 @@
 package io.github.danielmkraus.applicationinsights.configuration;
 
+import io.github.danielmkraus.applicationinsights.aop.ClassExecutionFilter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;

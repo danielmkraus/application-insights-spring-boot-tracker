@@ -41,7 +41,7 @@ class GlobalSpringBeanMethodCallInterceptorDisabledIntegrationTest {
 
     @DynamicPropertySource
     static void setProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.application-insights.tracker.global-interceptor-enabled", () -> "false");
+        registry.add("spring.application-insights.tracker.enabled", () -> "false");
     }
 
 }

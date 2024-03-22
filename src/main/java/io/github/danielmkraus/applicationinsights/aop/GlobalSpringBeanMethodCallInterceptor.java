@@ -1,15 +1,15 @@
 package io.github.danielmkraus.applicationinsights.aop;
 
 import io.github.danielmkraus.applicationinsights.configuration.ApplicationInsightsTracker;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
+import org.aopalliance.aop.Advice;
+import org.aopalliance.intercept.MethodInterceptor;
+import org.aopalliance.intercept.MethodInvocation;
+import org.springframework.aop.Advisor;
 
 /**
- * Aspect responsible to intercept all spring bean calls to be tracked in azure application insights
+ * Responsible to intercept all spring bean calls to be tracked in azure application insights
  */
-@Aspect
-public class GlobalSpringBeanMethodCallInterceptor {
+public class GlobalSpringBeanMethodCallInterceptor implements Advisor, MethodInterceptor {
 
     private final ApplicationInsightsTracker tracker;
 
@@ -17,27 +17,27 @@ public class GlobalSpringBeanMethodCallInterceptor {
         this.tracker = tracker;
     }
 
-    @Around("within(*) " +
-            " && !within(io.github.danielmkraus.applicationinsights..*) " +
-            " && !within(is(EnumType)) " +
-            " && !within(is(FinalType)) " +
-            " && !within(is(AspectType))" +
-            " && !target(is(EnumType)) " +
-            " && !target(is(FinalType)) " +
-            " && !target(is(AspectType))" +
-            " && !this(is(EnumType)) " +
-            " && !this(is(FinalType)) " +
-            " && !this(is(AspectType))" +
-            " && !within(org.springframework..*) " +
-            " && !@within(io.github.danielmkraus.applicationinsights.annotation.ApplicationInsightsTracking) " +
-            " && !@target(io.github.danielmkraus.applicationinsights.annotation.ApplicationInsightsTracking) " +
-            " && !@annotation(io.github.danielmkraus.applicationinsights.annotation.ApplicationInsightsTracking) " +
-            " && !@within(io.github.danielmkraus.applicationinsights.annotation.DisableApplicationInsightsTracking) " +
-            " && !@target(io.github.danielmkraus.applicationinsights.annotation.DisableApplicationInsightsTracking) " +
-            " && !@annotation(io.github.danielmkraus.applicationinsights.annotation.DisableApplicationInsightsTracking) " +
-            " && !within(com.microsoft.applicationinsights..*) ")
-    public Object intercept(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        return tracker.trackCall(proceedingJoinPoint);
+    @Override
+    public Advice getAdvice() {
+        return this;
     }
+
+    @Override
+    public boolean isPerInstance(){
+        return true;
+    }
+
+    @Override
+    public Object invoke(MethodInvocation invocation) throws Throwable {
+        return tracker.trackCall(new TraceableCall(invocation::proceed,
+                getShortMethodName(invocation),
+                invocation.getMethod().toGenericString()
+        ));
+    }
+
+    private static String getShortMethodName(MethodInvocation invocation) {
+        return invocation.getClass().getSimpleName() + "." + invocation.getMethod().getName();
+    }
+
 }
 
